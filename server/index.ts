@@ -3,16 +3,27 @@ import discord from "discord.js"
 import dotenv from "dotenv"
 import "./assignCommands.js"
 import COMMANDS from "./commands.js";
+import {Modules} from "./modules.js"
 
 dotenv.config()
 
 const client = new discord.Client({intents: [discord.Intents.FLAGS.GUILDS, discord.Intents.FLAGS.DIRECT_MESSAGES]})
+let loadedModules = []
 
 client.once("ready", () => {
     console.log(chalk.green.bold(`logged in as ` + chalk.white.bold(client.user.tag)))
+    Modules.map(module => {
+        module.client = client
+        loadedModules.push(module)
+    })
 })
 
 client.on("interactionCreate", (interaction: discord.Interaction) => {
+    loadedModules.map(module => {
+        if (module.interactionCreate) {
+            module.interactionCreate(interaction)
+        }
+    })
     if (!interaction.isCommand()) return
     switch (interaction.commandName) {
         case "help":
@@ -24,6 +35,10 @@ client.on("interactionCreate", (interaction: discord.Interaction) => {
             })
             interaction.reply({embeds: [embed]})
             break;
+        case "debug":
+            if  (interaction.options.getString("echo-string")) {
+                return interaction.reply(interaction.options.getString("echo-string"))
+            }
         default:
             interaction.reply("...this command does not exist?").then(() => {
                 setTimeout(() => {

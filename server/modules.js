@@ -1,6 +1,6 @@
 // Import All Modules
-import hypixelApi from "./modules/hypixelApi.js"
+import hypixel from "./modules/hypixel.js"
 
 export const Modules = [
-    hypixelApi
+    new hypixel
 ]

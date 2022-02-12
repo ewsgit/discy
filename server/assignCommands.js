@@ -1,12 +1,59 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
-import COMMANDS from "./commands.js";
 import dotenv from "dotenv";
+import COMMANDS from "./commands.js";
+import { Modules } from "./modules.js";
 dotenv.config();
+let ALLCOMMANDS = [];
+ALLCOMMANDS.push(COMMANDS);
+COMMANDS.map(command => {
+    ALLCOMMANDS.push(command);
+});
+Modules.map(module => {
+    if (module.registerBotCommands) {
+        module.registerBotCommands.map(mod => {
+            ALLCOMMANDS.push(mod);
+        });
+    }
+});
 let commands = [];
-COMMANDS.map((command, ind) => {
-    commands.push(new SlashCommandBuilder().setName(command.name).setDescription(command.description));
+ALLCOMMANDS.map((command, ind) => {
+    let out = new SlashCommandBuilder().setName(command.name).setDescription(command.description);
+    if (command.options) {
+        command.options.map(option => {
+            switch (option.type) {
+                case "string":
+                    out.addStringOption((opt) => {
+                        let obj = opt;
+                        obj.setName(option.name);
+                        obj.setDescription(option.description);
+                        if (option.allowedValues) {
+                            option.allowedValues.map(allowedVal => {
+                                obj.addChoice(allowedVal.name, allowedVal.value);
+                            });
+                        }
+                        return obj;
+                    });
+                    break;
+                case "number":
+                    out.addIntegerOption((opt) => {
+                        let obj = opt.setName(option.name);
+                        obj.setDescription(option.description);
+                        if (option.allowedValues) {
+                            option.allowedValues.map(allowedVal => {
+                                obj.addChoice(allowedVal.name, allowedVal.value);
+                            });
+                        }
+                        return obj;
+                    });
+                    break;
+                default:
+                    console.error("invalid module option type: " + option.type);
+            }
+        });
+    }
+    commands.push(out);
 });
 const rest = new REST({ version: "9" }).setToken(process.env.BOT_TOKEN);
 if (process.env.DEVMODE === "true") {
@@ -15,7 +62,7 @@ if (process.env.DEVMODE === "true") {
         console.log("commands registered!");
     })
         .catch((err) => {
-        console.error(err);
+        console.log(err);
     });
 }
 else {
@@ -27,3 +74,4 @@ else {
         console.error(err);
     });
 }
+console.log(commands);
