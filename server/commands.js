@@ -8,10 +8,9 @@ const COMMANDS = [{
         name: "get-user-data",
         type: "string",
         description: "sends a message of a user's data",
-        allowedValues: [{name: "a", value: "abc"},{name: "z", value: "xyz"}]
+        allowedValues: [{name: "a", value: "abc"}, {name: "z", value: "xyz"}]
     }, {
-        name: "echo-string", type: "string",
-        description: "echo the string sent back to the user"
+        name: "echo-string", type: "string", description: "echo the string sent back to the user"
     }]
 }]
 

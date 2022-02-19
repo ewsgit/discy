@@ -4,6 +4,15 @@ export default class hypixel {
     registerBotCommands: {
         name: string;
         description: string;
+        options: {
+            name: string;
+            description: string;
+            type: string;
+        }[];
     }[];
-    interactionCreate(interaction: any): void;
+    constructor();
+    hypixelApi: {
+        getPlayer(playerName: string): Promise<import("undici/types/dispatcher").ResponseData>;
+    };
+    onInteractionCreate(interaction: discord.Interaction): void;
 }
