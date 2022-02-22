@@ -12,7 +12,7 @@ export default class hypixel {
     }[];
     constructor();
     hypixelApi: {
-        getPlayer(playerName: string): Promise<import("undici/types/dispatcher").ResponseData>;
+        getPlayer(playerName: string): void;
     };
     onInteractionCreate(interaction: discord.Interaction): void;
 }

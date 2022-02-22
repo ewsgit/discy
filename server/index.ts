@@ -3,7 +3,7 @@ import discord from "discord.js";
 import dotenv from "dotenv";
 import "./assignCommands.js";
 import COMMANDS from "./commands.js";
-import Modules from "./modules.js";
+import {Modules} from "./modules.js";
 dotenv.config();
 
 const client = new discord.Client({
@@ -19,15 +19,12 @@ let ALLCOMMANDS = [];
 COMMANDS.map(command => {
   ALLCOMMANDS.push(command);
 });
-Modules().then(val => {
-  console.log(val)
-  val.map(module => {
-    if (module.registerBotCommands) {
-      module.registerBotCommands.map(mod => {
-        ALLCOMMANDS.push(mod);
-      });
-    }
-  });
+Modules.map(module => {
+  if (module.registerBotCommands) {
+    module.registerBotCommands.map(mod => {
+      ALLCOMMANDS.push(mod);
+    });
+  }
 });
 
 client.once("ready", () => {

@@ -3,7 +3,7 @@ import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import dotenv from "dotenv";
 import COMMANDS from "./commands.js";
-import Modules from "./modules.js";
+import {Modules} from "./modules.js";
 
 dotenv.config();
 
@@ -12,15 +12,13 @@ let ALLCOMMANDS = [];
 COMMANDS.map(command => {
   ALLCOMMANDS.push(command);
 });
-Modules().then(val => {
-  val.map(module => {
+Modules.map(module => {
     if (module.registerBotCommands) {
       module.registerBotCommands.map(mod => {
         ALLCOMMANDS.push(mod);
       });
     }
   });
-});
 
 let commands = [];
 ALLCOMMANDS.map((command, ind) => {
