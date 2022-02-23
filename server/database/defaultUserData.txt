@@ -1,0 +1,6 @@
+{
+  "color": "#f5b5a5",
+  "tooltips": true,
+  "guilds": [],
+  "version": "1"
+}
