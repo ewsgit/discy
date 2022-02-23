@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import discord from "discord.js";
 import dotenv from "dotenv";
+import fs from "fs";
 import "./assignCommands.js";
 import COMMANDS from "./commands.js";
 import { Modules } from "./modules.js";
@@ -29,6 +30,24 @@ client.once("ready", () => {
         module.client = client;
         loadedModules.push(module);
     });
+    // check if database is setup
+    // if not, setup database
+    if (!fs.existsSync("./database/guilds")) {
+        fs.mkdir("./database/guilds/", (err) => {
+            if (err) {
+                console.log(err);
+                process.exit(1);
+            }
+        });
+    }
+    if (!fs.existsSync("./database/users")) {
+        fs.mkdir("./database/users/", (err) => {
+            if (err) {
+                console.log(err);
+                process.exit(1);
+            }
+        });
+    }
     setInterval(() => {
         client.user.setActivity(`${client.guilds.cache.size} servers | ${client.users.cache.size} users`, { type: "WATCHING" });
     }, 10000);
@@ -76,4 +95,8 @@ client.on("interactionCreate", (interaction) => {
 });
 client.login(process.env.BOT_TOKEN).catch(err => {
     console.log(err);
+});
+process.addListener("beforeExit", (code) => {
+    console.log("Exiting with code: " + code);
+    console.log(chalk.redBright(":^("));
 });
