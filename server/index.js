@@ -5,6 +5,7 @@ import fs from "fs";
 import "./assignCommands.js";
 import COMMANDS from "./commands.js";
 import { Modules } from "./modules.js";
+import * as database from "./database.js";
 dotenv.config();
 const client = new discord.Client({
     intents: [
@@ -33,7 +34,7 @@ client.once("ready", () => {
     // check if database is setup
     // if not, setup database
     if (!fs.existsSync("./database/guilds")) {
-        fs.mkdir("./database/guilds/", (err) => {
+        fs.mkdir("./database/guilds/", err => {
             if (err) {
                 console.log(err);
                 process.exit(1);
@@ -41,7 +42,7 @@ client.once("ready", () => {
         });
     }
     if (!fs.existsSync("./database/users")) {
-        fs.mkdir("./database/users/", (err) => {
+        fs.mkdir("./database/users/", err => {
             if (err) {
                 console.log(err);
                 process.exit(1);
@@ -53,6 +54,8 @@ client.once("ready", () => {
     }, 10000);
 });
 client.on("interactionCreate", (interaction) => {
+    if (!database.getUserData(interaction.user.id))
+        return database.writeUserData(interaction.user.id, fs.readFileSync("./database/defaultUserData.txt"));
     // execute all functions inside modules called onInteractionCreate
     loadedModules.map(module => {
         if (module.onInteractionCreate) {
@@ -96,7 +99,7 @@ client.on("interactionCreate", (interaction) => {
 client.login(process.env.BOT_TOKEN).catch(err => {
     console.log(err);
 });
-process.addListener("beforeExit", (code) => {
+process.addListener("beforeExit", code => {
     console.log("Exiting with code: " + code);
     console.log(chalk.redBright(":^("));
 });

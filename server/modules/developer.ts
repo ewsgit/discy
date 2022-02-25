@@ -37,7 +37,7 @@ export default class moduleName {
         if (interaction.options.getString("command")) {
           switch (interaction.options.getString("command")) {
             case "echo-database":
-              interaction.reply(database.getAllData().toString());
+              interaction.reply(JSON.stringify(database.getAllData()));
               break;
           }
         } else {
