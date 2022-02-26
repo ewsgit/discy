@@ -53,7 +53,20 @@ client.once("ready", () => {
         client.user.setActivity(`${client.guilds.cache.size} servers | ${client.users.cache.size} users`, { type: "WATCHING" });
     }, 10000);
 });
+client.on("guildMemberRemove", member => {
+    let data = database.getGuildData(member.guild.id);
+    data.members.map(member => {
+        if (member.id === member.id) {
+            delete member.id;
+        }
+    });
+    database.writeGuildData(member.guild.id, data);
+});
 client.on("interactionCreate", (interaction) => {
+    if (!database.getGuildData(interaction.guild.id))
+        database.writeGuildData(interaction.guild.id, {
+            users: [interaction.user.id],
+        });
     if (!database.getUserData(interaction.user.id))
         return database.writeUserData(interaction.user.id, fs.readFileSync("./database/defaultUserData.txt"));
     // execute all functions inside modules called onInteractionCreate

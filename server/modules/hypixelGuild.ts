@@ -67,6 +67,7 @@ export default class hypixelGuild {
                     interaction.reply(
                       "you have been successfully verified, welcome to " +
                         interaction.guild.name +
+                        " " +
                         interaction.user.username +
                         " !"
                     );

@@ -53,6 +53,7 @@ export default class hypixelGuild {
                                 interaction.user.tag) {
                                 interaction.reply("you have been successfully verified, welcome to " +
                                     interaction.guild.name +
+                                    " " +
                                     interaction.user.username +
                                     " !");
                                 let userData = db.getUserData(interaction.user.id);
