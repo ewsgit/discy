@@ -1,3 +1,4 @@
+import discord from "discord.js";
 import dotenv from "dotenv";
 import * as database from "./../database.js";
 export default class moduleName {
@@ -16,6 +17,10 @@ export default class moduleName {
                                 name: "echo database",
                                 value: "echo-database",
                             },
+                            {
+                                name: "update bot",
+                                value: "update-bot",
+                            }
                         ],
                     },
                 ],
@@ -35,6 +40,13 @@ export default class moduleName {
                         case "echo-database":
                             interaction.reply(JSON.stringify(database.getAllData()));
                             break;
+                        case "update-bot":
+                            var embed = new discord.MessageEmbed();
+                            embed.setColor("#1da464");
+                            embed.setTitle("Discy Updating...");
+                            embed.setThumbnail("https://ewsgit.github.io/discy/assets/loading.gif");
+                            embed.setDescription("Discy is updating\nplease wait a few minutes");
+                            interaction.reply({ embeds: [embed] });
                     }
                 }
                 else {
