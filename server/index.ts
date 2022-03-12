@@ -62,6 +62,11 @@ client.once("ready", () => {
       { type: "WATCHING" }
     );
   }, 10000);
+  var debugChannel = client.channels.cache.get(
+    "855810019961339985"
+  ) as discord.TextChannel;
+  var date = new Date();
+  debugChannel.send(`[${date.toISOString()}] ` + "Bot Online and listening!");
 });
 
 client.on("guildMemberRemove", member => {

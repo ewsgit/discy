@@ -52,6 +52,9 @@ client.once("ready", () => {
     setInterval(() => {
         client.user.setActivity(`${client.guilds.cache.size} servers | ${client.users.cache.size} users`, { type: "WATCHING" });
     }, 10000);
+    var debugChannel = client.channels.cache.get("855810019961339985");
+    var date = new Date();
+    debugChannel.send(`[${date.toISOString()}] ` + "Bot Online and listening!");
 });
 client.on("guildMemberRemove", member => {
     let data = database.getGuildData(member.guild.id);
