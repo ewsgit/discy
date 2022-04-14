@@ -70,14 +70,14 @@ client.once("ready", () => {
 });
 
 client.on("guildMemberRemove", member => {
-  let data = database.getGuildData(member.guild.id)
+  let data = database.getGuildData(member.guild.id);
   data.members.map(member => {
     if (member.id === member.id) {
-      delete member.id
+      delete member.id;
     }
-  })
-  database.writeGuildData(member.guild.id, data)
-})
+  });
+  database.writeGuildData(member.guild.id, data);
+});
 
 client.on("interactionCreate", (interaction: discord.Interaction) => {
   if (!database.getGuildData(interaction.guild.id))

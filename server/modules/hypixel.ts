@@ -36,6 +36,7 @@ export default class hypixel {
           );
         });
     },
+    
   };
 
   onInteractionCreate(interaction: discord.Interaction) {
