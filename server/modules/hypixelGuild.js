@@ -26,6 +26,17 @@ export default class hypixelGuild {
                     },
                 ],
             },
+            {
+                name: "sethypixelguild",
+                description: "set the hypixel guild for the current discord server",
+                options: [
+                    {
+                        name: "guildname",
+                        description: "the guild name",
+                        type: "string",
+                    },
+                ],
+            },
         ];
         dotenv.config({
             path: "./../.env",
@@ -56,16 +67,23 @@ export default class hypixelGuild {
                                     .then(guild => {
                                     var _a;
                                     guild = guild.guild;
-                                    if (guild.name === ((_a = db.getGuildData(interaction.guild.id)) === null || _a === void 0 ? void 0 : _a.hypixelGuild)) {
-                                        interaction.reply("You have linked your discord account and in the guild :D");
+                                    if (guild.name ===
+                                        ((_a = db.getGuildData(interaction.guild.id)) === null || _a === void 0 ? void 0 : _a.hypixelGuild)) {
+                                        interaction.reply("You have linked your discord account and in the guild :D,\nscanning your account for the requirements");
+                                        // check requirements
+                                        let guildData = db.getGuildData(interaction.guild.id);
+                                        let requirements = guild.hypixelRequirements;
+                                        let requirementsMet = false;
+                                        // skywars level
+                                        interaction.editReply("You don't meet the requirements to verify for the guild deathtraps");
                                     }
                                     else {
-                                        interaction.reply("You have linked your discord account but not in the guild :/");
+                                        interaction.reply("You have linked your discord account but are not in the guild :/");
                                     }
                                     let userData = db.getUserData(interaction.user.id);
                                     userData.hypixelGuild = guild.name;
                                     db.writeUserData(interaction.user.id, userData);
-                                    interaction.reply(`You are in the guild ${guild.name}, ${interaction.user.username}!`);
+                                    interaction.editReply(`You are in the guild ${guild.name}, ${interaction.user.username}!`);
                                 });
                             }
                             else {
@@ -84,6 +102,12 @@ export default class hypixelGuild {
                     interaction.reply("You are in the guild " + userData.hypixelGuild);
                 }
             case "sethypixelguild":
+                let guildData = db.getGuildData(interaction.guild.id);
+                if (!interaction.options.getString("guildname"))
+                    return interaction.reply("You need to set the guild name");
+                guildData.hypixelGuild = interaction.options.getString("guildname");
+                db.writeGuildData(interaction.guild.id, guildData);
+                interaction.reply("Set guild to " + guildData.hypixelGuild);
         }
     }
 }

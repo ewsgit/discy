@@ -11,5 +11,5 @@ export default class hypixelGuild {
         }[];
     }[];
     constructor();
-    onInteractionCreate(interaction: discord.Interaction): void;
+    onInteractionCreate(interaction: discord.Interaction): Promise<void>;
 }
